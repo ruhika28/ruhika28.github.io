@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<head>
+<meta charset="utf-8">
+
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v4.js"></script>
+    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/motion-ui/1.1.1/motion-ui.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.3.0/css/foundation.min.css">
+
+<style>
+    .cell{
+        width:20% !important;
+    }
+    
+    </style>
+
+    </head>
+<body>
+  <div class="off-canvas-content has-reveal-left">
+<article class="grid-container">
+        <div class="grid-x grid-margin-x small-up-2 medium-up-3 large-up-4">
+     
+        </div>
+    
+     
+      </article>
+      </div>
+
+<script>
+/*
+var nested_data = d3.nest()
+.key(function(d) { return d.status; })
+.entries(csv_data);
+*/
+// set the dimensions and margins of the graph
+var margin = {top: 3, right: 20, bottom: 30, left: 50},
+    width = screen.width*0.15 - margin.left - margin.right,
+    height = screen.width*0.1 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+
+//Read the data
+d3.json("classification/data.json",
+
+  // When reading json, I must format variables:
+ /* function(d){
+    return { date : d3.timeParse("%Y-%m-%d")(d.date), value : d.value }
+  },*/
+
+  // Now I can use this dataset:
+  function(data0) {
+  
+    for (var i=0; i<data0.length; i++) {
+        var temp=[];
+          for (var y=0; y<data0[i]["dates"].length; y++) {  
+              data0[i]["country"]=data0[i]["country"].replace('"','').replace('"','').replace('\"','');
+               data0[i]["province"]=data0[i]["province"].replace('"','').replace('"','').replace('\"','');
+          temp.push({"date":d3.timeParse("%m/%d/%y")(data0[i]["dates"][y]),"value":data0[i]["value"][y]});
+        
+    }
+        data0[i]["data"]=temp;
+    }
+data0.sort((a, b) => a.country !== b.country ? a.country < b.country ? -1 : 1 : 0);
+    var html="";
+    for (var i=0; i<data0.length; i++) {
+     
+    
+html +='<span class="cell m'+data0[i]["id"]+'"></span>';
+    }
+    
+   // alert(window.location.hash.replace("#",""));
+    d3.select(".grid-x").html(html);
+    for (var i=0; i<data0.length; i++) { 
+        if ((data0[i]["color"]==window.location.hash.replace("#",""))) {
+   
+    var svg = d3.select(".m"+data0[i]["id"])
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+    // Add X axis --> it is a date format
+    var x = d3.scaleTime()
+      .domain(d3.extent(data0[i]["data"], function(d) { return d.date; }))
+      .range([ 0, width ]);
+    svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x).ticks(5));
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .domain(d3.extent(data0[i]["data"], function(d) { return +d.value; }))
+      .range([ height, 0 ]);
+   // svg.append("g")
+     // .call(d3.axisLeft(y));
+
+    // Add the line
+      var path = svg.append("path")
+      .datum(data0[i]["data"])
+
+      .attr("fill", "none")
+      .attr("stroke", data0[i]["color"])
+      .attr("stroke-width", 3)
+      .attr("d", d3.line()
+        .x(function(d) { return x(d.date) })
+        .y(function(d) { return y(d.value) })
+            .curve(d3.curveNatural)
+        )
+    
+
+    
+    var curtain = svg.append('rect')
+ .attr('x', -1 * width)
+ .attr('y', -1 * height)
+ .attr('height', height)
+ .attr('width', width-2)
+ .attr('class', 'curtain')
+ .attr('transform', 'rotate(180)')
+ .style('fill', '#ffffff')
+        
+  curtain.transition()
+ .duration(1500)
+ //.ease("linear")
+ .attr('x', -2 * width)
+            
+            
+            svg.append("text")
+        .attr("x", (width / 2))             
+        .attr("y", 20)
+        .attr("text-anchor", "middle")  
+        .style("font-size", "12px") 
+       //.style("text-decoration", "underline")  
+        .text(data0[i]["province"]+" "+data0[i]["country"]);
+            
+            
+    }
+    }
+})
+
+</script>
+    
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<!-- Compressed JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.3.0/js/foundation.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/motion-ui/1.2.3/motion-ui.min.js"></script>
+    <script>
+      $(document).foundation();
+    </script>
+
+</body>
+</html>

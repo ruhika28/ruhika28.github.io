@@ -1,0 +1,2057 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>COVID-19</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+<script src="https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css" rel="stylesheet" />
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+      <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.core.js" integrity="sha256-tsIbwIT+4qFYQl3lJqYOZst6ot+JaR73T5eusuTukXM=" crossorigin="anonymous"></script>
+    
+    <script>
+        
+        
+
+    $(document).ready(function() {
+$( "#dialog" ).dialog({
+      autoOpen: false,
+      show: {
+        effect: "blind",
+        duration: 1000
+      },
+      hide: {
+        effect: "explode",
+        duration: 1000
+      }
+    });
+        
+       
+    });
+    </script>
+<style>
+	body { margin: 0; padding: 0; }
+	#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+    #title1 { position: absolute; top: 0; bottom: 0; width: 100%; z-index: 100000; height:20px}
+    .mySlides {display: none}
+img {vertical-align: middle;}
+
+/* Slideshow container */
+.slideshow-container {
+
+  position: relative;
+  margin: auto;
+}
+
+/* Next & previous buttons */
+.prev, .next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  padding: 16px;
+  margin-top: -22px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover, .next:hover {
+  background-color: rgba(0,0,0,0.8);
+}
+
+/* Caption text */
+.text {
+  color: black;
+  font-size: 15px;
+  padding: 8px 12px;
+  position: absolute;
+  bottom: -20px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+  color: #f2f2f2;
+  font-size: 12px;
+  padding: 8px 12px;
+  position: absolute;
+  top: 0;
+}
+
+/* The dots/bullets/indicators */
+.dot {
+  cursor: pointer;
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+.active, .dot:hover {
+  background-color: #717171;
+}
+
+/* Fading animation */
+.fade {
+  -webkit-animation-name: fade;
+  -webkit-animation-duration: 1.5s;
+  animation-name: fade;
+  animation-duration: 1.5s;
+}
+
+@-webkit-keyframes fade {
+  from {opacity: .4} 
+  to {opacity: 1}
+}
+
+@keyframes fade {
+  from {opacity: .4} 
+  to {opacity: 1}
+}
+
+/* On smaller screens, decrease text size */
+@media only screen and (max-width: 300px) {
+  .prev, .next,.text {font-size: 11px}
+}
+  /*  #state-legend { position: absolute; top: 400px; bottom: 0; }*/
+</style>
+</head>
+<body>
+<style>
+	#log_linear0{
+	height:0px;	
+	}
+.legend {
+background-color: #fff;
+border-radius: 3px;
+bottom: 30px;
+box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+padding: 10px;
+position: absolute;
+right: 10px;
+z-index: 100;
+width:35%;
+height: 30%;
+overflow: auto;    
+}
+    
+    #dialog{
+       /* height:600px;*/
+    width:90% !important;
+        z-index:200000000  !important;
+    }
+    table{
+        
+        background: white;
+    }
+    .ui-dialog { 
+        width:75% !important;
+        z-index: 200000000 !important ;}
+.legend h4 {
+margin: 0 0 10px;
+}
+ 
+.legend div span {
+border-radius: 50%;
+display: inline-block;
+height: 10px;
+margin-right: 5px;
+width: 10px;
+}
+</style>
+     <style> /* set the CSS */
+
+.line3 {
+  fill: none;
+  stroke: green
+      ;
+  stroke-width: 2px;
+}
+.grey {
+  fill: none;
+  stroke: grey;
+  opacity:0.5;    
+  stroke-width: 2px;
+}         
+         
+      .grey1 {
+  fill: none;
+  stroke: grey;
+  opacity:0.5;    
+  stroke-width: 2px;
+          stroke-dasharray: 5;
+}       
+         
+.line1 {
+  fill: none;
+  stroke: red;
+  stroke-width: 2px;
+}   
+         
+.line11 {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 2px;
+}          
+        
+.line2 {
+  fill: none;
+  stroke: black;
+  stroke-width: 2px;
+}   
+         
+         #selected{
+             
+             position:relative;
+             top:-220px !important;
+         }         
+
+</style>
+    <form id="formSelects">
+   <div id="state-legend" class="legend">
+Last updated: <span class="time"></span><br>
+<select id="select_change">
+    <option value="alerts">
+    Government response levels
+    </option>
+    
+    <option value="confirm_daily">
+    Yesterday change in confirmed
+    </option>
+    <option value="deaths_daily">
+    Yesterday change in deaths
+    </option>
+    <option value="recover_daily">
+    Yesterday change in recovered
+    </option>
+    <option value="confirm">
+    Total Confirmed
+    </option>
+    <option value="deaths">
+    Deaths
+    </option>
+    
+    <option value="recover">
+    Recovered
+    </option>
+    
+       
+</select>       
+       <br>
+       
+    
+       <div id="log_linear0">
+     <input type="radio" 
+       name="log_linear" 
+       value="adaptive"
+       checked>
+            Adaptive
+</input>  
+       
+       
+       
+       
+<input type="radio" 
+       name="log_linear" 
+       value="linear">
+            Linear
+</input>
+
+<input type="radio"
+  name="log_linear" 
+       value="log">
+            Log10()
+</input>
+
+    </div>
+    
+    
+    
+    
+       <span id="selected2">
+          
+                     <h3>Stringency levels</h3>
+           <div><span id="six112"  style="width:300px !important"><span style="background-color: #800026"></span>100</span></div>  
+           
+             <div><span id="six112"  style="width:300px !important"><span style="background-color: #bd0026"></span>90</span></div>  
+        <div><span id="six112"  style="width:300px !important"><span style="background-color: #e31a1c"></span>80</span></div>       
+           
+    <div><span id="six111"  style="width:300px !important"><span style="background-color: #fc4e2a"></span>70</span></div>
+<div><span id="six11"  style="width:300px !important"><span style="background-color: #fd8d3c"></span>60</span></div>
+           
+<div><span id="six1"  style="width:300px !important"><span style="background-color: #feb24c"></span>50</span></div>
+    
+<div><span id="four1"  style="width:300px !important"><span style="background-color: #fed976"></span>40</span></div>    
+<div><span id="four11"  style="width:300px !important"><span style="background-color: #ffeda0"></span>20 </span></div>
+<div><span id="two1"  style="width:300px !important"><span style="background-color: #ffffcc"></span>1</span></div>
+<div><span id="zero1"  style="width:300px !important"><span style="background-color: #000000"></span>No data</span></div>
+<!---<a  target="_blank" href="https://static1.squarespace.com/static/5e7b914b3b5f9a42199b3337/t/5e8a288d138b9761efb337f3/1586112654619/Alert_color_codes.pdf">Detailed explanation</a> --->   
+    
+         </span>  
+
+     <span id="selected">
+      
+
+  <table width=200>   
+<tr><td>
+<div><span style="background-color: #7f2704"></span><span id="max0">81,000</span></div>
+<div><span style="background-color: #a63603"></span><span id="seven">20,000</span></div>
+<div><span style="background-color: #d94801"></span><span id="six">10,000</span></div>
+<div><span style="background-color: #f16913"></span><span id="five">20,000</span></div>
+   
+<div><span style="background-color: #fd8d3c"></span><span id="four">1,000</span></div>
+</td><td>      
+<div><span style="background-color: #fdae6b"></span><span id="three">500</span></div>
+<div><span style="background-color: #fdd0a2"></span><span id="two">200</span></div>
+      
+<div id="hide_layer"><span style="background-color: #fee6ce"></span><span id="one">100</span></div>
+         <div><span style="background-color: #000000"></span><span id="zero">0</span></div>
+</td>     
+</tr>        
+</table>       
+         </span>  
+    </form>       
+</div>
+ 
+
+<div id="map"></div>
+
+<div id="dialog1" title="Attetion!">
+    <p>We detected that you are using a version of Safari lower than 12. In this version, the map might not be properly displayed. Please switch to some other browser like Opera, Chrome, or Firefox to see the map. </p>
+  </div>  
+<div id="dialog" title="COVID-19 cases, mobility trends, and moving averages">
+    
+    
+    
+    <div class="slideshow-container">
+
+<div class="mySlides fade">
+  <div class="numbertext">1 / 11</div>
+ <div id="confirm"></div>
+  <div class="text">Sigmoid and cumulative curves for confirmed</div>
+</div>
+
+<div class="mySlides fade">
+  <div class="numbertext">2 / 11</div>
+   <div id="deaths">
+       
+       </div>
+  <div class="text">Sigmoid  and cumulative curves for deaths</div>
+</div>
+
+<div class="mySlides fade">
+  <div class="numbertext">3 / 11</div>
+   <div id="recover">
+       
+       </div>
+  <div class="text">Sigmoid  and cumulative curves for recovered</div>
+</div>
+        
+<div class="mySlides fade">
+  <div class="numbertext">4 / 11</div>
+  <div id="all_curves">
+       
+       </div>
+  <div class="text">Cumulative curves: confirmed,deaths, recovered</div>
+</div>   
+        
+<div class="mySlides fade">
+  <div class="numbertext">5 / 11</div>
+  <div id="grocery">
+       
+       </div>
+  <div class="text">Mobility to grocery stores and pharmacies</div>
+</div>   
+<div class="mySlides fade">
+  <div class="numbertext">6 / 11</div>
+<div id="parks">
+       
+       </div>
+  <div class="text">Mobility to parks</div>
+</div>  
+        
+<div class="mySlides fade">
+  <div class="numbertext">7 / 11</div>
+<div id="residential">
+       
+       </div>
+  <div class="text">Mobility near residential areas</div>
+</div>      
+        
+<div class="mySlides fade">
+  <div class="numbertext">8 / 11</div>
+<div id="retail">
+       
+       </div>
+  <div class="text">Mobility to retail stores</div>
+</div>   
+        
+<div class="mySlides fade">
+  <div class="numbertext">9 / 11</div>
+ <div id="transit">
+       
+       </div>
+  <div class="text">Transit mobility</div>
+</div>     
+        
+<div class="mySlides fade">
+<div class="numbertext">10 / 11</div>
+<div id="workplaces"></div>
+<div class="text">Mobility to workplaces</div>
+</div>    
+        
+        
+ <div class="mySlides fade">
+  <div class="numbertext">11 / 11</div>       
+ <div id="moving_average"></div> 
+  <div class="text">7-day moving average for confirmed cases</div>
+</div> 
+        
+        
+
+<a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+<a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+</div>
+<br>
+
+<div style="text-align:center">
+  <span class="dot" onclick="currentSlide(1)"></span> 
+  <span class="dot" onclick="currentSlide(2)"></span> 
+  <span class="dot" onclick="currentSlide(3)"></span> 
+    <span class="dot" onclick="currentSlide(4)"></span> 
+    <span class="dot" onclick="currentSlide(5)"></span> 
+       <span class="dot" onclick="currentSlide(6)"></span> 
+       <span class="dot" onclick="currentSlide(7)"></span> 
+       <span class="dot" onclick="currentSlide(8)"></span> 
+       <span class="dot" onclick="currentSlide(9)"></span> 
+       <span class="dot" onclick="currentSlide(10)"></span> 
+       <span class="dot" onclick="currentSlide(11)"></span> 
+     
+</div>
+
+
+</div>
+
+
+
+<script>
+var isMobile = false; //initiate as false
+// device detection
+if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent) 
+    || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(navigator.userAgent.substr(0,4))) { 
+    isMobile = true;
+}
+    
+function moving_average(numbers) {
+  return _.chain(numbers)
+          .map(window)
+          .map(average)
+          .value();
+}
+  
+    navigator.sayswho= (function(){
+    var ua= navigator.userAgent, tem, 
+    M= ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+    if(/trident/i.test(M[1])){
+        tem=  /\brv[ :]+(\d+)/g.exec(ua) || [];
+        return 'IE '+(tem[1] || '');
+    }
+    if(M[1]=== 'Chrome'){
+        tem= ua.match(/\b(OPR|Edge)\/(\d+)/);
+        if(tem!= null) return tem.slice(1).join(' ').replace('OPR', 'Opera');
+    }
+    M= M[2]? [M[1], M[2]]: [navigator.appName, navigator.appVersion, '-?'];
+    if((tem= ua.match(/version\/(\d+)/i))!= null) M.splice(1, 1, tem[1]);
+    return M.join(' ');
+})();
+    
+    var slideIndex = 1;
+showSlides(slideIndex);
+
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  var dots = document.getElementsByClassName("dot");
+  if (n > slides.length) {slideIndex = 1}    
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";  
+  }
+  for (i = 0; i < dots.length; i++) {
+      dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "block";  
+  dots[slideIndex-1].className += " active";
+}
+    
+    
+    
+   // console.log(navigator.sayswho);
+if (navigator.sayswho.indexOf("Safari")>-1 && Number(navigator.sayswho.split(" ")[1])<=11) {
+    
+    $( "#dialog1" ).dialog({
+      autoOpen: false,
+      show: {
+        effect: "blind",
+        duration: 1000
+      },
+      hide: {
+        effect: "explode",
+        duration: 1000
+      }
+    }); 
+     $( "#dialog1" ).dialog( "open" );
+    
+}
+    /*
+    #ffffcc
+#ffeda0
+#fed976
+#feb24c
+#fd8d3c
+#fc4e2a
+#e31a1c
+#bd0026
+#800026
+    
+    
+    */
+    
+     var arr000=[[0, '#000000'],[1, '#ffffcc'],[20, '#ffeda0'],[40, '#fed976'],[50, '#feb24c'],[60, '#fd8d3c'],[70, '#fc4e2a'],[80, '#e31a1c'],[90, '#bd0026'],[100, '#800026']];
+    
+    function log(x, base) {
+    return Math.log10(x);
+}
+    
+    function getBaseLog(x, y) {
+  return Math.log10(y) / Math.log10(x);
+}
+
+      var popup;
+     var data0=[];
+        var map;
+    var layer;
+     var all_ranges={"confirm":[],"confirm_log":[],"deaths":[],"deaths_log":[],"recover":[],"recover_log":[],"confirm_daily":[],"confirm_daily_log":[],"recover_daily":[],"recover_daily_log":[],"deaths_daily":[],"deaths_daily_log":[]}; 
+    
+    var dd=[];
+    d3.csv('Color code - world1.csv', function(dat,i){
+   
+        dd.push(dat);
+      //  console.log(i);
+        if (i==201) {
+           
+            
+            	mapboxgl.accessToken = 'pk.eyJ1Ijoib2J1Y2hlbCIsImEiOiJmOWQ2MzQxNmE0M2Y3YmVjNzA2NmM2MGQzYTIwYmQ3OCJ9.psxJSN8q9n2-HfFGoIUNJA';
+map = new mapboxgl.Map({
+container: 'map',
+style: 'mapbox://styles/mapbox/dark-v8',
+center: [-12.403732, 10.492392],
+zoom: 1
+});
+            
+            
+ map.addControl(new mapboxgl.FullscreenControl());
+    var stateLegendEl = document.getElementById('state-legend');
+    
+    stateLegendEl.style.display = 'block';
+            draw_map();
+        }      
+    });
+    
+  
+    
+    
+    
+    function draw_map(){  
+        
+   
+  
+
+document.getElementById("select_change").addEventListener("change",change_map);
+    
+    var rad = document.getElementsByName("log_linear");
+var prev = null;
+for (var i = 0; i < rad.length; i++) {
+    
+   // rad[i].style.visibility="hidden";
+    rad[i].addEventListener('change', function() {
+        (prev) ? console.log(prev.value): null;
+        if (this !== prev) {
+            prev = this;
+        }
+       // alert(this.value)
+        change_map();
+    });
+}
+    
+  
+
+   // document.getElementById('#map').style.display = 'block';
+fetch('update38.json').then(res => res.json()) //ne_10m_admin_1_states_provinces102
+.then(data => {  
+    
+      data0=data;
+   var all_isos=dd.map(function(d){return d.Iso});
+  
+    
+    d3.selectAll(".time").html(data0["features"][0]["properties"]["date"]);
+    //console.log(data);
+    var country_isos=dd.map(function(d){return d.Iso});
+   // console.log(country_isos);
+    
+    
+    
+   
+for (var i=0; i<data["features"].length; i++) {
+    
+     data["features"][i].properties.id=data["features"][i].id;
+    
+            if (all_isos.indexOf(data["features"][i]["properties"]["iso"])>-1) {
+        data["features"][i].properties.alert_code=Number(dd[all_isos.indexOf(data["features"][i]["properties"]["iso"])]["Alert Level"]);
+        } else {
+            data["features"][i].alert_code=0;
+            
+        }
+       // console.log(data["features"][i].alert_code);
+        data["features"][i].id=data["features"][i]["id"].toString();
+        if (country_isos.indexOf(data["features"][i].properties.iso)>-1) {
+        data["features"][i].properties.code=dd[country_isos.indexOf(data["features"][i].properties.iso)]["Alert Level"];
+        data["features"][i].properties.id=data["features"][i]["id"];    
+        
+    } else {
+        
+        data["features"][i].properties.code=0;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    if (typeof data["features"][i].properties.confirm!="undefined") {
+        
+
+        
+        if (isNaN(data["features"][i].properties["confirm"])==true) {
+            data["features"][i].properties["confirm"]=0; 
+        }
+        if (isNaN(data["features"][i].properties["deaths"])==true) {
+            data["features"][i].properties["deaths"]=0; 
+        }
+        if (isNaN(data["features"][i].properties["recover"])==true) {
+            data["features"][i].properties["recover"]=0; 
+        }
+        
+        if (isNaN(data["features"][i].properties["confirm_daily"])==true) {
+            data["features"][i].properties["confirm_daily"]=0; 
+        }
+        if (isNaN(data["features"][i].properties["deaths_daily"])==true || data["features"][i].properties["deaths_daily"]=="" || data["features"][i].properties["deaths_daily"]<0) {
+            data["features"][i].properties["deaths_daily"]=0; 
+        }
+        if (isNaN(data["features"][i].properties["recover_daily"])==true || data["features"][i].properties["recover_daily"]=="" || data["features"][i].properties["recover_daily"]<0) {
+            data["features"][i].properties["recover_daily"]=0; 
+        }
+        data["features"][i].properties["confirm_log"]=log(data["features"][i].properties.confirm+0.0001,2);
+        data["features"][i].properties["deaths_log"]=log(data["features"][i].properties.deaths+0.0001,2);
+        data["features"][i].properties["recover_log"]=log(data["features"][i].properties.recover+0.0001,2);
+        data["features"][i].properties["confirm_daily_log"]=log(data["features"][i].properties.confirm_daily+0.0001,2);
+        data["features"][i].properties["deaths_daily_log"]=log(data["features"][i].properties.deaths_daily+0.0001,2);
+        data["features"][i].properties["recover_daily_log"]=log(data["features"][i].properties.recover_daily+0.0001,2);
+        
+       //console.log(data["features"][i].properties["recover_daily"],data["features"][i].properties["deaths_daily"]);
+    all_ranges["confirm"].push(data["features"][i].properties.confirm);
+    all_ranges["confirm_log"].push(data["features"][i].properties.confirm_log);  
+        all_ranges["confirm_daily"].push(data["features"][i].properties.confirm_daily);
+    all_ranges["confirm_daily_log"].push(data["features"][i].properties.confirm_daily_log);
+        
+    all_ranges["deaths"].push(data["features"][i].properties.deaths);
+    all_ranges["deaths_log"].push(data["features"][i].properties.deaths_log); 
+    all_ranges["deaths_daily"].push(data["features"][i].properties.deaths_daily);
+    all_ranges["deaths_daily_log"].push(data["features"][i].properties.deaths_daily_log);  
+        
+    all_ranges["recover"].push(data["features"][i].properties.recover);
+    all_ranges["recover_log"].push(data["features"][i].properties.recover_log);     
+    all_ranges["recover_daily"].push(data["features"][i].properties.recover_daily);
+    all_ranges["recover_daily_log"].push(data["features"][i].properties.recover_daily_log);    
+    }
+}
+// console.log(Math.max(...all_ranges["confirm"]),Math.min(...all_ranges["confirm"]));
+ /*   
+var max0=Math.max(...all_ranges["confirm"]);
+var min0=Math.min(...all_ranges["confirm"]);    
+document.getElementById('max0').innerHTML=formatNumber(max0).toString();    
+document.getElementById('one').innerHTML=formatNumber(Math.round(max0/8)).toString();    
+document.getElementById('two').innerHTML=formatNumber(Math.round(max0/4)).toString(); 
+document.getElementById('three').innerHTML=formatNumber(Math.round(max0/4)+Math.round(max0/8)).toString();   
+document.getElementById('four').innerHTML=formatNumber(Math.round(max0/2)).toString(); 
+document.getElementById('five').innerHTML=formatNumber(Math.round(max0*0.63)).toString();   
+document.getElementById('six').innerHTML=formatNumber(Math.round(max0*0.75)).toString();  
+document.getElementById('seven').innerHTML=formatNumber(Math.round(max0*0.88)).toString();  
+
+
+*/
+    /*
+    var max0=Math.max(...all_ranges["confirm"]);
+var min0=Math.min(...all_ranges["confirm"]); 
+              document.getElementById("log_linear0").style.visibility="hidden";
+document.getElementById('max0').innerHTML="4";
+    //formatNumber(max0).toString();    
+document.getElementById('zero').innerHTML= "0";
+    
+    
+    document.getElementById('one').parentElement.style.visibility="hidden";
+   // document.getElementById('one').parentElement.style.lineHeight=0;
+        document.getElementById('one').parentElement.style.padding=0;
+        // document.getElementById('one').parentElement.style.height=0;
+    //formatNumber(Math.round(max0/8)).toString();    
+document.getElementById('two').parentElement.style.visibility="hidden";
+   // document.getElementById('two').parentElement.style.lineHeight=0;
+        document.getElementById('two').parentElement.style.padding=0;
+      //   document.getElementById('two').parentElement.style.height=0;
+    //formatNumber(Math.round(max0/4)).toString(); 
+document.getElementById('three').innerHTML= "1";
+    //formatNumber((Math.round(max0/4)+Math.round(max0/8))).toString();   
+document.getElementById('four').parentElement.style.visibility="hidden";
+   // document.getElementById('four').parentElement.style.lineHeight=0;
+    document.getElementById('four').parentElement.style.padding=0;
+       // document.getElementById('four').parentElement.style.height=0;
+    //formatNumber(Math.round(max0/2)).toString(); 
+document.getElementById('five').innerHTML="2";
+    //formatNumber(Math.round(max0*0.63)).toString();   
+document.getElementById('six').parentElement.style.visibility="hidden";
+   // document.getElementById('six').parentElement.style.lineHeight=0;
+     document.getElementById('six').parentElement.style.padding=0;
+     document.getElementById('six').parentElement.style.height=0;
+    
+    //formatNumber(Math.round(max0*0.75)).toString();  
+document.getElementById('seven').innerHTML="3";
+   // document.getElementById('zero').parentElement.style.visibility="hidden";
+   */
+        document.getElementById("log_linear0").style.visibility="hidden";
+    document.getElementById('selected2').style.visibility="visible";
+         document.getElementById('selected').style.visibility="hidden";
+    //formatNumber(Math.round(max0*0.88)).toString();  
+/*
+#ffffb2
+#fecc5c
+#fd8d3c
+#f03b20
+#bd0026
+
+
+*/
+
+ var arr=arr000;
+    
+map.on('load', function() {
+   // console.log(data);
+layer=map.addSource('places', {
+'type': 'geojson',
+'data': data
+});
+  map.addLayer({
+'id': 'place_data',
+'type': 'fill',
+'source': 'places',
+className: {
+property: "country"
+},
+'paint': {
+'fill-color': {
+property: "stringency",
+stops: arr
+},
+'fill-opacity': 0.7
+},
+'filter': ['==', '$type', 'Polygon']
+});
+   
+        map.on('click', 'place_data', function(e,i) {
+            
+
+           // $("#dialog"). attr('title', 'Details of COVID cases');
+          // console.log(e,i);
+            //console.log(e.features[0]);
+            if (typeof popup=="object") {
+            popup.remove();
+            // $( "#dialog" ).dialog( "close" );
+                
+        }
+            
+             
+            if (["US","CA","AU"].indexOf(e.features[0].properties.iso)==-1) {
+var ll=e.features[0].properties.id; 
+   var cou=e.features[0].properties.country;              
+        draw_plots(ll,cou);
+} else {
+    
+    var ll=e.features[0].properties.id; 
+     var cou=e.features[0].properties.province+", "+e.features[0].properties.country; 
+        draw_plots(ll,cou);
+}
+           // console.log(e.features[0].properties.country);
+        if (e.features[0].properties.province!=""){
+            var name=e.features[0].properties.province+", "+e.features[0].properties.country;
+        } else {
+            
+            var name=e.features[0].properties.country
+        }
+if  (d3.keys(e.features[0].properties).length>1) {              
+            
+popup=new mapboxgl.Popup()
+.setLngLat(e.lngLat)
+.setHTML("<b>"+name+"</b> <br>Yesterday change in confirmed:"+formatNumber(e.features[0].properties.confirm_daily).toString()+" <br>Yesterday change in recovered:"+formatNumber(e.features[0].properties.recover_daily).toString()+" <br>Yesterday change in deaths:"+formatNumber(e.features[0].properties.deaths_daily).toString()+ "<br>Total confirmed:"+formatNumber(e.features[0].properties.confirm).toString()+" <br>Total recovered:"+formatNumber(e.features[0].properties.recover).toString()+" <br>Total deaths:"+formatNumber(e.features[0].properties.deaths).toString()+" <br>Stringency: "+formatNumber(e.features[0].properties.stringency).toString())
+.addTo(map);
+   // if( isMobile==false ) {
+ 
+     $( "#dialog" ).dialog('option', 'position', [window.innerWidth*0.3,200]).dialog( "open" );
+	//}
+	
+             document.getElementsByClassName("mapboxgl-popup-close-button")[0].addEventListener("click",closeF);
+       // alert(document.getElementsByClassName("ui-button-icon").length,document.getElementsByClassName("mapboxgl-popup-close-button").length);
+        document.getElementsByClassName("ui-button-icon")[0].addEventListener("click",closeG);  
+   
+}
+
+
+
+        
+        });
+    
+         
+    
+
+});
+    
+    //[[min0, '#fff5eb'], [Math.round(max0/8), '#fee6ce'],[Math.round(max0/4), '#fdd0a2'],[Math.round(max0/4)+Math.round(max0/8), '#fdae6b'],[Math.round(max0/2), '#fd8d3c'],[Math.round(max0*0.63), '#f16913'],[Math.round(max0*0.75), '#d94801'],[Math.round(max0*0.88), '#a63603'],[max0, '#7f2704']]
+});  
+    }
+function change_map(e){
+    if (document.getElementById("select_change").value=="alerts") {
+	    document.getElementById("log_linear0").style.height="0px";
+    } else {
+	    
+	    
+	    document.getElementById("log_linear0").style.height="30px";
+    }
+	    
+	
+	
+       document.getElementById("log_linear0").style.visibility="visible";
+
+ document.getElementById('selected2').style.visibility="hidden";
+     document.getElementById('selected').style.visibility="visible";
+     document.getElementById('selected').style.position="relative";
+   // document.getElementById('selected').style.top="-220px !important";
+    
+  /*  document.getElementById('one').parentElement.style.visibility="visible";
+    //document.getElementById('one').parentElement.style.lineHeight=10;
+        document.getElementById('one').parentElement.style.padding=15;
+        // document.getElementById('one').parentElement.style.height=15;
+    //formatNumber(Math.round(max0/8)).toString();    
+document.getElementById('two').parentElement.style.visibility="visible";
+   // document.getElementById('two').parentElement.style.lineHeight=10;
+        document.getElementById('two').parentElement.style.padding=15;
+    
+    //formatNumber(Math.round(max0/4)).toString(); 
+
+    //formatNumber((Math.round(max0/4)+Math.round(max0/8))).toString();   
+document.getElementById('four').parentElement.style.visibility="visible";
+   // document.getElementById('four').parentElement.style.lineHeight=10;
+    document.getElementById('four').parentElement.style.padding=15;
+   //     document.getElementById('four').parentElement.style.height=15;
+    //formatNumber(Math.round(max0/2)).toString(); 
+document.getElementById('five').innerHTML="2";
+    //formatNumber(Math.round(max0*0.63)).toString();   
+document.getElementById('six').parentElement.style.visibility="visible";
+
+     document.getElementById('six').parentElement.style.padding=15;
+  //   document.getElementById('six').parentElement.style.height=15;
+    
+    
+    */
+    
+    
+    
+    
+    
+
+
+   // alert(document.querySelectorAll("input[name=log_linear]:checked")[0].value);
+d3.selectAll("#confirm,#recover,#deaths,#grocery,#parks,#residential,#retail,#transit,#workplaces").html("");
+    
+    
+
+                 if (typeof popup=="object") {
+            popup.remove();
+        }
+    
+    
+
+    
+    
+    if (typeof e!="undefined") {
+    var nn=e.target.value;
+    } else {
+    var nn=document.getElementById("select_change").value;
+    }
+    map.removeLayer('place_data');
+    if (document.querySelectorAll("input[name=log_linear]:checked")[0].value=="linear") {
+   var max0=Math.max(...all_ranges[nn]);
+var min0=Math.min(...all_ranges[nn]);    
+       if (min0<0) {
+    
+    var mm="0";
+}  else {
+    var mm=min0;
+    
+}    
+document.getElementById('max0').innerHTML=formatNumber(max0).toString();    
+document.getElementById('one').innerHTML=formatNumber(Math.round(max0/8)).toString();    
+document.getElementById('two').innerHTML=formatNumber(Math.round(max0/4)).toString(); 
+document.getElementById('three').innerHTML=formatNumber((Math.round(max0/4)+Math.round(max0/8))).toString();   
+document.getElementById('four').innerHTML=formatNumber(Math.round(max0/2)).toString(); 
+document.getElementById('five').innerHTML=formatNumber(Math.round(max0*0.63)).toString();   
+document.getElementById('six').innerHTML=formatNumber(Math.round(max0*0.75)).toString();  
+document.getElementById('seven').innerHTML=formatNumber(Math.round(max0*0.88)).toString();  
+//document.getElementById('zero').innerHTML=(mm).toString();          
+var arr=[[min0, '#fff5eb'], [Math.round(max0/8), '#fee6ce'],[Math.round(max0/4), '#fdd0a2'],[Math.round(max0/4)+Math.round(max0/8), '#fdae6b'],[Math.round(max0/2), '#fd8d3c'],[Math.round(max0*0.63), '#f16913'],[Math.round(max0*0.75), '#d94801'],[Math.round(max0*0.88), '#a63603'],[max0, '#7f2704']];
+      
+    } 
+    
+    else if (document.querySelectorAll("input[name=log_linear]:checked")[0].value=="log"){
+        
+if (nn+"_log"!="alerts_log") {
+var max0=Math.max(...all_ranges[nn+"_log"]);
+        
+        var max10=Math.max(...all_ranges[nn]);
+      //  alert(max0)
+var min0=Math.min(...all_ranges[nn+"_log"]); 
+
+        
+if (min0<0) {
+    
+    var mm="0";
+}  else {
+    var mm="0";
+    
+}      
+       // alert(min0)
+        
+var two0=Math.round(Math.pow(max0/8,getBaseLog(max0, max10))*100)/100;   
+        
+if (two0<1) 
+    
+    {var two=1} 
+    
+    else {
+        
+        
+        var two=two0;
+    }
+var three=Math.round(Math.pow(max0/4,getBaseLog(max0, max10))); 
+var four=Math.round(Math.pow(max0/4+max0/8,getBaseLog(max0, max10)));  
+var five=Math.round(Math.pow(max0/2,getBaseLog(max0, max10)));  
+var six=formatNumber(Math.round(Math.pow(max0*0.63,getBaseLog(max0, max10))));      
+var seven=formatNumber(Math.round(Math.pow(max0*0.75,getBaseLog(max0, max10))));      
+var eight=formatNumber(Math.round(Math.pow(max0*0.88,getBaseLog(max0, max10))));         
+//console.log(all_ranges["recover_daily_log"]);       
+document.getElementById('max0').innerHTML=""+formatNumber(Math.round(Math.pow(max0,getBaseLog(max0, max10)))).toString()+"";    
+document.getElementById('one').innerHTML=""+two.toString()+"";
+    
+   // Math.pow(max0/8,2).toString();    
+document.getElementById('two').innerHTML=""+three.toString()+"";
+    //Math.pow(max0/4,2).toString(); 
+document.getElementById('three').innerHTML=""+four.toString()+"";
+    //Math.pow(max0/4+max0/8,2).toString();   
+document.getElementById('four').innerHTML=""+five.toString()+"";
+    //Math.pow(max0/2,2).toString(); 
+document.getElementById('five').innerHTML=""+six.toString()+"";
+    //Math.pow(max0*0.63,2).toString();   
+document.getElementById('six').innerHTML=""+seven.toString()+"";
+    //Math.pow(max0*0.75,2).toString();  
+document.getElementById('seven').innerHTML=""+formatNumber(eight).toString()+"";
+    //Math.pow(max0*0.88,2).toString(); 
+document.getElementById('zero').innerHTML=(mm).toString();         
+if (min0>=0) {       
+var arr=[[min0, '#fff5eb'], [max0/8, '#fee6ce'],[max0/4, '#fdd0a2'],[max0/4+max0/8, '#fdae6b'],[max0/2, '#fd8d3c'],[max0*0.63, '#f16913'],[max0*0.75, '#d94801'],[max0*0.88, '#a63603'],[max0, '#7f2704']];     
+document.getElementById("hide_layer").visibility="visible";    
+    
+    
+} else {
+    var arr=[ [max0/8, '#fee6ce'],[max0/4, '#fdd0a2'],[max0/4+max0/8, '#fdae6b'],[max0/2, '#fd8d3c'],[max0*0.63, '#f16913'],[max0*0.75, '#d94801'],[max0*0.88, '#a63603'],[max0, '#7f2704']];   
+document.getElementById("hide_layer").visibility="hidden";    
+}
+} 
+        else {
+    
+    var max0=4;
+    var min0=0;
+          document.getElementById("log_linear0").style.visibility="hidden";
+     document.getElementById('selected2').style.visibility="visible";
+          document.getElementById('selected').style.visibility="hidden";
+ var arr=arr000;
+            
+  nn="stringency";         
+}
+
+    }
+
+    
+    else if (document.querySelectorAll("input[name=log_linear]:checked")[0].value=="adaptive"){
+      if (nn=="confirm" || nn=="recover") {  
+var max0=Math.max(...all_ranges[nn]);
+var min0=Math.min(...all_ranges[nn]); 
+var nn0=nn;       
+          
+ if (min0<0) {
+    
+    var mm="0";
+}  else {
+    var mm=min0;
+    
+}              
+document.getElementById('max0').innerHTML=formatNumber(max0).toString();    
+document.getElementById('one').innerHTML= "100";
+    //formatNumber(Math.round(max0/8)).toString();    
+document.getElementById('two').innerHTML= "200";
+    //formatNumber(Math.round(max0/4)).toString(); 
+document.getElementById('three').innerHTML= "500";
+    //formatNumber((Math.round(max0/4)+Math.round(max0/8))).toString();   
+document.getElementById('four').innerHTML="1,000";
+    //formatNumber(Math.round(max0/2)).toString(); 
+document.getElementById('five').innerHTML="2,000";
+    //formatNumber(Math.round(max0*0.63)).toString();   
+document.getElementById('six').innerHTML="10,000";
+    //formatNumber(Math.round(max0*0.75)).toString();  
+document.getElementById('seven').innerHTML="30,000";
+        //  document.getElementById('zero').innerHTML=(mm).toString();  
+    //formatNumber(Math.round(max0*0.88)).toString();  
+var arr=[[1, '#fff5eb'], [100, '#fee6ce'],[200, '#fdd0a2'],[500, '#fdae6b'],[1000, '#fd8d3c'],[2000, '#f16913'],[10000, '#d94801'],[30000, '#a63603'],[max0, '#7f2704']];
+    } else if (nn=="confirm_daily" || nn=="deaths") {
+var max0=Math.max(...all_ranges[nn]);
+var min0=Math.min(...all_ranges[nn]);   
+        
+//console.log(nn);
+ if (min0<0) {
+    
+    var mm="0";
+}  else {
+    var mm=min0;
+    
+}            
+         
+document.getElementById('max0').innerHTML=formatNumber(max0).toString();    
+document.getElementById('one').innerHTML= "100";
+    //formatNumber(Math.round(max0/8)).toString();    
+document.getElementById('two').innerHTML= "200";
+    //formatNumber(Math.round(max0/4)).toString(); 
+document.getElementById('three').innerHTML= "500";
+    //formatNumber((Math.round(max0/4)+Math.round(max0/8))).toString();   
+document.getElementById('four').innerHTML="1,000";
+    //formatNumber(Math.round(max0/2)).toString(); 
+document.getElementById('five').innerHTML="2,000";
+    //formatNumber(Math.round(max0*0.63)).toString();   
+document.getElementById('six').innerHTML="2,500";
+    //formatNumber(Math.round(max0*0.75)).toString();  
+document.getElementById('seven').innerHTML="3,000";
+       // document.getElementById('zero').innerHTML=(mm).toString();  
+    //formatNumber(Math.round(max0*0.88)).toString();  
+  if (document.querySelectorAll("input[name=log_linear]:checked")[0].value=="log"){ 
+      var arr=[[Math.log10(1), '#fff5eb'], [Math.log10(100), '#fee6ce'],[Math.log10(200), '#fdd0a2'],[Math.log10(500), '#fdae6b'],[Math.log10(1000), '#fd8d3c'],[Math.log10(2000), '#f16913'],[Math.log10(2500), '#d94801'],[Math.log10(3000), '#a63603'],[Math.log10(max0), '#7f2704']];
+  } else {
+        
+var arr=[[1, '#fff5eb'], [100, '#fee6ce'],[200, '#fdd0a2'],[500, '#fdae6b'],[1000, '#fd8d3c'],[2000, '#f16913'],[2500, '#d94801'],[3000, '#a63603'],[max0, '#7f2704']];
+      
+  }
+        
+       // console.log(arr);
+    } else  {   
+        //alert(nn);
+  if (nn!="alerts") {      
+        
+var max0=Math.max(...all_ranges[nn]);
+var min0=Math.min(...all_ranges[nn]);    
+      
+  
+    if (min0<0) {
+    
+    var mm="0";
+}  else {
+    var mm=min0;
+    
+}    
+document.getElementById('max0').innerHTML=formatNumber(max0).toString();    
+document.getElementById('one').innerHTML= "10";
+    //formatNumber(Math.round(max0/8)).toString();    
+document.getElementById('two').innerHTML= "50";
+    //formatNumber(Math.round(max0/4)).toString(); 
+document.getElementById('three').innerHTML= "100";
+    //formatNumber((Math.round(max0/4)+Math.round(max0/8))).toString();   
+document.getElementById('four').innerHTML="150";
+    //formatNumber(Math.round(max0/2)).toString(); 
+document.getElementById('five').innerHTML="200";
+    //formatNumber(Math.round(max0*0.63)).toString();   
+document.getElementById('six').innerHTML="250";
+    //formatNumber(Math.round(max0*0.75)).toString();  
+document.getElementById('seven').innerHTML="300";
+        
+        
+       // document.getElementById('zero').innerHTML=(mm).toString();  
+    //formatNumber(Math.round(max0*0.88)).toString();  
+        var arr=[[1, '#fff5eb'], [10, '#fee6ce'],[50, '#fdd0a2'],[100, '#fdae6b'],[150, '#fd8d3c'],[200, '#f16913'],[250, '#d94801'],[300, '#a63603'],[max0, '#7f2704']];
+        
+        
+        
+    }
+         else {
+             /*
+             var COLOR_SCALE = [
+   [0, 0, 0],  
+  [89, 161, 79], 
+  [237,201,72],
+  [242,142,43],
+        [225,87,89]
+];
+             
+             */
+               /*  document.querySelectorAll("input[name=log_linear]")[0].value = "adaptive"; // add the currency symbol
+    var event = new Event("change");
+   document.querySelectorAll("input[name=log_linear]")[0].dispatchEvent(event);*/
+      var max0=4;
+var min0=0;   
+ var arr=arr000;
+    
+      nn="stringency";   
+  }
+    }
+            
+            //[[min0, '#fff5eb'], [Math.round(max0/8), '#fee6ce'],[Math.round(max0/4), '#fdd0a2'],[Math.round(max0/4)+Math.round(max0/8), '#fdae6b'],[Math.round(max0/2), '#fd8d3c'],[Math.round(max0*0.63), '#f16913'],[Math.round(max0*0.75), '#d94801'],[Math.round(max0*0.88), '#a63603'],[max0, '#7f2704']];
+      
+        
+        //[[1, '#fff5eb'], [100, '#fee6ce'],[200, '#fdd0a2'],[500, '#fdae6b'],[1000, '#fd8d3c'],[2000, '#f16913'],[10000, '#d94801'],[20000, '#a63603'],[max0, '#7f2704']]
+    }
+    
+    
+      //console.log(arr);
+    
+if (document.querySelectorAll("input[name=log_linear]:checked")[0].value=="log") {
+    
+    var nn0=nn+"_log";
+} else {
+    var nn0=nn;
+    
+}
+
+  
+    if (document.getElementById("select_change").value=="alerts") {
+        
+    //  document.querySelectorAll("input[name=log_linear]").dispatchEvent(new Event('change'));
+        
+        
+    document.querySelectorAll("input[name=log_linear]")[0].value = "adaptive"; // add the currency symbol
+    var event = new Event("change");
+   document.querySelectorAll("input[name=log_linear]")[0].dispatchEvent(event);
+    
+   var max0=4;
+    var min0=0;
+          document.getElementById("log_linear0").style.visibility="hidden";
+     document.getElementById('selected2').style.visibility="visible";
+          document.getElementById('selected').style.visibility="hidden";
+    
+ var arr=[[0, '#000000'],[1, '#ffffb2'],[20, '#fecc5c'],[40, '#fd8d3c'],[60, '#f03b20'],[80, '#bd0026'],[100, '#800026']];
+    
+  nn="stringency"; 
+         var nn0=nn;     
+   
+    }  
+    
+    if (nn0=="confirm_daily_log") {
+          var max0=Math.max(...all_ranges[nn0.replace("_log","")]);
+//var mmmmm=[];
+        
+      //  all_ranges[nn0].map(function(d){ if (isNaN(d)) {} else {mmmmm.push(d)};});
+          //  var max0=mmmmm.sort(function(a,b){return a-b;})[mmmmm.length-1];
+var min0=Math.min(...all_ranges[nn0]);   
+//alert(max0);
+      var arr=[[Math.log10(1), '#fff5eb'], [Math.log10(100), '#fee6ce'],[Math.log10(200), '#fdd0a2'],[Math.log10(500), '#fdae6b'],[Math.log10(1000), '#fd8d3c'],[Math.log10(2000), '#f16913'],[Math.log10(2500), '#d94801'],[Math.log10(3000), '#a63603'],[Math.log10(max0), '#7f2704']];
+//console.log(nn);
+ if (min0<0) {
+    
+    var mm="0";
+}  else {
+    var mm=min0;
+    
+}            
+        // console.log(mmmmm.sort(function(a,b){return a-b;}));
+document.getElementById('max0').innerHTML=formatNumber(max0).toString();    
+document.getElementById('one').innerHTML= "100";
+    //formatNumber(Math.round(max0/8)).toString();    
+document.getElementById('two').innerHTML= "200";
+    //formatNumber(Math.round(max0/4)).toString(); 
+document.getElementById('three').innerHTML= "500";
+    //formatNumber((Math.round(max0/4)+Math.round(max0/8))).toString();   
+document.getElementById('four').innerHTML="1,000";
+    //formatNumber(Math.round(max0/2)).toString(); 
+document.getElementById('five').innerHTML="2,000";
+    //formatNumber(Math.round(max0*0.63)).toString();   
+document.getElementById('six').innerHTML="2,500";
+    //formatNumber(Math.round(max0*0.75)).toString();  
+document.getElementById('seven').innerHTML="3,000";
+        
+    } else if (nn0=="confirm_daily") {
+        
+            var max0=Math.max(...all_ranges[nn0]);
+var min0=Math.min(...all_ranges[nn0]);   
+          console.log(max0);
+        
+        var arr=[[1, '#fff5eb'], [100, '#fee6ce'],[200, '#fdd0a2'],[500, '#fdae6b'],[1000, '#fd8d3c'],[2000, '#f16913'],[2500, '#d94801'],[3000, '#a63603'],[max0, '#7f2704']];
+        
+        //console.log(nn);
+ if (min0<0) {
+    
+    var mm="0";
+}  else {
+    var mm=min0;
+    
+}            
+         
+document.getElementById('max0').innerHTML=formatNumber(max0).toString();    
+document.getElementById('one').innerHTML= "100";
+    //formatNumber(Math.round(max0/8)).toString();    
+document.getElementById('two').innerHTML= "200";
+    //formatNumber(Math.round(max0/4)).toString(); 
+document.getElementById('three').innerHTML= "500";
+    //formatNumber((Math.round(max0/4)+Math.round(max0/8))).toString();   
+document.getElementById('four').innerHTML="1,000";
+    //formatNumber(Math.round(max0/2)).toString(); 
+document.getElementById('five').innerHTML="2,000";
+    //formatNumber(Math.round(max0*0.63)).toString();   
+document.getElementById('six').innerHTML="2,500";
+    //formatNumber(Math.round(max0*0.75)).toString();  
+document.getElementById('seven').innerHTML="3,000";
+    }
+ 
+    //    map.addLayer({
+//'id': 'place_data',
+  //  map.removeLayer('place_data');
+    //console.log(nn0,nn,arr);
+    map.addLayer({
+'id': 'place_data',
+'type': 'fill',
+'source': 'places',
+className: {
+property: "country"
+},
+'paint': {
+'fill-color': {
+property: nn0,
+stops: arr
+},
+'fill-opacity': 0.7
+},
+'filter': ['==', '$type', 'Polygon']
+});
+   
+        map.on('click', 'place_data', function(e,i) {
+      
+
+              // $("#dialog"). attr('title', 'Details of COVID cases');
+           //  alert(e.features[0].id);
+             // console.log(e.features[0]);
+             if (typeof popup=="object") {
+            popup.remove();
+                  // $( "#dialog" ).dialog( "close" );
+                     d3.select("#state-legend").style("top","80% !important");
+        }
+            
+
+            //console.log(e.features[0].properties.country);
+        if (e.features[0].properties.province!=""){
+            var name=e.features[0].properties.province+", "+e.features[0].properties.country;
+        } else {
+            
+            var name=e.features[0].properties.country
+        }
+            
+            
+
+            
+            
+            
+            
+     if (document.querySelectorAll("input[name=log_linear]:checked")[0].value=="linear") {         
+   var html="<b>"+name+"</b> <br>Yesterday change in  confirmed:"+formatNumber(e.features[0].properties.confirm_daily)+" <br>Yesterday change in recovered:"+formatNumber(e.features[0].properties.recover_daily)+" <br>Yesterday change in  deaths:"+formatNumber(e.features[0].properties.deaths_daily)+"<br>Total confirmed:"+formatNumber(e.features[0].properties.confirm)+" <br>Total recovered:"+formatNumber(e.features[0].properties.recover)+" <br>Total deaths:"+formatNumber(e.features[0].properties.deaths)+" <br>Stringency: "+formatNumber(e.features[0].properties.stringency).toString();  
+         
+     } else {
+       var html="<b>"+name+"</b> <br>Yesterday change in  confirmed:"+formatNumber(e.features[0].properties.confirm_daily)+" <br>Yesterday change in  recovered:"+formatNumber(e.features[0].properties.recover_daily)+" <br>Yesterday change in  deaths:"+formatNumber(e.features[0].properties.deaths_daily)+"<br>Total confirmed:"+formatNumber(e.features[0].properties.confirm)+" <br>Total recovered:"+formatNumber(e.features[0].properties.recover)+" <br>Total deaths:"+formatNumber(e.features[0].properties.deaths)+" <br>Stringency: "+formatNumber(e.features[0].properties.stringency).toString();     
+         
+     }
+            
+           // alert(d3.keys(e.features[0].properties));
+            
+if  (d3.keys(e.features[0].properties).length>1) {    
+	
+	// if( isMobile==false ) {
+ $( "#dialog" ).dialog( "open" );
+    // $( "#dialog" ).dialog( "moveToTop" ).dialog('option', 'position', [700,100]).dialog( "open" );
+	//}
+                 //$( "#dialog" ).dialog( "open" );
+popup=new mapboxgl.Popup()
+.setLngLat(e.lngLat)
+.setHTML(html)
+.addTo(map);
+                  document.getElementsByClassName("mapboxgl-popup-close-button")[0].addEventListener("click",closeF);
+        
+         document.getElementsByClassName("ui-button-icon")[0].addEventListener("click",closeG);
+}
+            
+            
+            //console.log(e.features[0]);
+            if (["US","CA","AU"].indexOf(e.features[0].properties.iso)==-1) {
+var ll=e.features[0].properties.id;    
+var cou=e.features[0].properties.country; 
+                
+//console.log(e.features[0].id,e.features[0].properties.id);                
+        draw_plots(ll,cou);
+} else {
+    //console.log(e.features[0].id,e.features[0].properties.id); 
+    var ll=e.features[0].properties.id;
+     var cou=e.features[0].properties.province+", "+e.features[0].properties.country; 
+        draw_plots(ll,cou);
+}
+
+            
+            
+
+        
+        
+        
+
+        });
+
+}        
+function formatNumber(num) {
+  return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+}
+    
+    function draw_plots(iso,country){
+      // console.log(iso,country);
+  // alert(iso);
+
+     //console.log(data9);
+d3.json("img0/"+iso+".json").then(function(data_) {
+   // console.log(data_);
+    
+    
+    
+            var ddd=data_;
+       var ddd1=data_;
+             var ddd0=data_;
+     var ddd3=data_;
+     var ddd2=data_;
+     var ddd4=data_;
+    
+
+     //  console.log(ddd0,ddd1);
+     d3.json("sigmoid_data/"+iso+".json").then(function(data9) {  
+         
+          
+           
+         ///connect to python and convert cumsum to timeseries -- no need
+         //https://stackoverflow.com/questions/16541618/perform-a-reverse-cumulative-sum-on-a-numpy-array -- no need
+         ///convert all three plots; plot on one plot as curves
+         ///heatmap for daily changes in confirmed
+         ///heatmap for daily changes in deaths
+         
+
+    d3.select("#confirm").html("");
+     d3.select("#deaths").html("");
+     d3.select("#recover").html("");
+  /* if (["mixed_18","187"].indexOf(iso)>-1) {
+       
+       data9["confirm"]["y"]=[];
+       data9["confirm_dot"]="";
+       
+       all_curves
+   }*/
+  
+draw_histogram(ddd2,"confirm","line1",country,data9["confirm"],data9["confirm_dot"],iso);
+    draw_histogram(ddd3,"deaths","line2",country,data9["deaths"],data9["deaths_dot"],iso);
+    draw_histogram(ddd4,"recover","line3",country,data9["recover"],data9["recover_dot"],iso);
+         
+    
+       
+         draw_curves(ddd1,"all_curves",country,iso); 
+          draw_moving_average(ddd,"moving_average",country,iso);
+        // console.log(data);
+        
+           
+          
+
+
+ 
+    
+      d3.selectAll("#grocery,#parks,#residential,#retail,#transit,#workplaces").html("");
+    
+      d3.json("mobility/"+iso+".json").then(function(data900) {   
+                    // console.log(typeof data900);
+                 
+                 if (typeof data900=="object"){
+              // console.log(data900);
+                draw_mobility(data900,name,country,iso,data_);
+                 }
+                 
+                   });
+    
+});
+    });
+
+}    
+    ///0.61 -100 0.39 - 61  (0.61 - 1.39)
+    //(0.5+0.19) - 122 9+30+31-9 - (Jan22 - May 24)
+    
+    //50: 0.625
+    //111: 1.3875000000000002
+    
+   function addDays(date, days) {
+  const copy = new Date(Number(date))
+  copy.setDate(date.getDate() + days)
+  return copy
+}
+    
+    
+function draw_mobility(dataK,name,country,iso,ddata){
+    
+  //  console.log(ddata);
+    
+d3.selectAll("#grocery,#parks,#residential,#retail,#transit,#workplaces").html("");
+    
+var ma={"grocery":"grocery_and_pharmacy_percent_change_from_baseline","parks":"parks_percent_change_from_baseline","residential":"residential_percent_change_from_baseline","retail":"retail_and_recreation_percent_change_from_baseline","transit":"transit_stations_percent_change_from_baseline","workplaces":"workplaces_percent_change_from_baseline"}
+        
+        
+
+
+for (el in d3.values(ma)) {
+    
+    var margin = {top: 20, right: 20, bottom: 30, left: 50},
+    width = window.innerWidth*0.6 - margin.left - margin.right,
+    height = window.innerWidth*0.4- margin.top - margin.bottom;
+
+// parse the date / time
+var parseTime = d3.timeParse("%M/%d/%y");
+
+// set the ranges
+var x = d3.scaleTime().range([0, width]);
+
+var y = d3.scaleLinear().range([height, 0]);
+   // console.log(d3.values(ma)[el],d3.keys(ma)[el]);
+var valueline = d3.line()
+    .x(function(d) { return x(d["date_"+d3.keys(ma)[el]]); })
+    .y(function(d) { return y(d[d3.values(ma)[el]]); });       
+
+    
+var svg = d3.select("#"+d3.keys(ma)[el]).append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+// Get the data
+//d3.csv("data.csv").then(function(data) {
+
+    
+    dataK.forEach(function(d) {
+      d["date_"+d3.keys(ma)[el]] = new Date(2020,d.date.toString().replace("0","").split("-")[1]-1,d.date.toString().split("-")[2])
+    d[d3.values(ma)[el]] =+d[d3.values(ma)[el]];
+
+  });
+ 
+//console.log(dataK);
+    var ddates=dataK.map(function(d){return d["date_"+d3.keys(ma)[el]];});
+   // console.log(ddates);
+var cconfirmed=dataK.map(function(d){return d[d3.values(ma)[el]];});
+    
+  x.domain(d3.extent(ddates));
+  y.domain(d3.extent(cconfirmed));
+
+  svg.append("path")
+      .data([dataK])
+      .attr("class", "line11")
+      .attr("d", valueline);
+   /*svg.append("path")
+      .data([dataK])
+      .attr("class", "line3")
+      .attr("d", valueline2);  
+   svg.append("path")
+      .data([dataK])
+      .attr("class", "line2")
+      .attr("d", valueline1); */
+
+  // Add the x Axis
+  svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x).ticks(5))
+    .selectAll("text")
+    .attr("y", 7)
+   // .attr("x", 9)
+   .attr("dy", ".35em")
+    .attr("transform", "rotate(35)")
+    .style("text-anchor", "start");
+
+  // Add the y Axis
+  svg.append("g")
+      .call(d3.axisLeft(y).ticks(5).tickFormat(d3.format(".2s")));
+
+
+    svg.append("text")
+        .attr("x", (width / 2))             
+        .attr("y", 0 - (margin.top / 2))
+        .attr("text-anchor", "middle")  
+        .style("font-size", "12px") 
+       // .style("text-decoration", "underline")  
+        .text(country+" "+d3.keys(ma)[el]);
+}
+
+}
+function movingAvg(array, count, qualifier){
+
+        // calculate average for subarray
+        var avg = function(array, qualifier){
+
+            var sum = 0, count = 0, val;
+            for (var i in array){
+                val = array[i];
+                if (!qualifier || qualifier(val)){
+                    sum += val;
+                    count++;
+                }
+            }
+
+            return sum / count;
+        };
+
+        var result = [], val;
+
+        // pad beginning of result with null values
+        for (var i=0; i < count-1; i++)
+            result.push(null);
+
+        // calculate average for each subarray and add to result
+        for (var i=0, len=array.length - count; i <= len; i++){
+
+            val = avg(array.slice(i, i + count), qualifier);
+            if (isNaN(val))
+                result.push(null);
+            else
+                result.push(val);
+        }
+
+        return result;
+    }
+    
+  function draw_moving_average(dataK1,name,country,iso){
+    d3.select("#moving_average").html("");
+       
+       
+    //console.log(dataK);
+        // set the dimensions and margins of the graph
+var margin = {top: 20, right: 20, bottom: 30, left: 50},
+  width = window.innerWidth*0.6 - margin.left - margin.right,
+    height = window.innerWidth*0.4- margin.top - margin.bottom;
+
+
+// parse the date / time
+var parseTime = d3.timeParse("%M/%d/%y");
+
+// set the ranges
+var x = d3.scaleTime().range([0, width]);
+
+var y = d3.scaleLinear().range([height, 0]);
+    
+var valueline = d3.line()
+//  .interpolate("interpolation")
+    .x(function(d) { return x(d["date"]); })
+    .y(function(d) { return y(d["confirm_daily"]); });       
+  var valueline1 = d3.line()
+//  .interpolate("interpolation")
+    .x(function(d) { return x(d["date"]); })
+    .y(function(d) { return y(d["value"]); });     
+
+    //const calc = new MovingAverageCalculator();
+    
+var svg = d3.select("#moving_average").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+//console.log(dataK1);
+// Get the data
+      var someData=[];
+//d3.csv("data.csv").then(function(data) {
+dataK1.forEach(function(d) {
+      d["date"] = new Date(2020,d.date.toString().split("/")[0]-1,d.date.toString().split("/")[1])
+      d["confirm_daily"] = +d["confirm_daily"];
+     someData.push(+d["confirm_daily"]);
+      
+  });
+       //console.log(calc.mean);
+
+ var line=movingAvg(someData, 7);
+      
+      
+      
+//console.log(dataK);
+    var ddates=dataK1.map(function(d){return d.date;});
+    //console.log(ddates);
+var cconfirmed=dataK1.map(function(d){return d["confirm_daily"];});
+    
+var line_data=[];
+      
+      for (var i=6; i<ddates.length; i++) {
+          
+          line_data.push({"date":ddates[i],"value":line[i+3]});
+          
+      }
+      
+      
+      
+      
+      
+      
+    var maxxx=d3.max([d3.max(cconfirmed)]);
+//console.log(cconfirmed);
+  x.domain(d3.extent(ddates));
+  y.domain([d3.min(cconfirmed),maxxx]);
+ // format the data
+  /*dataK.forEach(function(d) {
+      d["date"] = new Date(2020,d.date.toString().split("/")[0]-1,d.date.toString().split("/")[1])
+      d["comfirm_daily"] = +d["comfirm_daily"];
+       d["recover_daily"] = +d["recover_daily"];
+       d["deaths_daily"] = +d["deaths_daily"];
+  });*/
+  svg.append("path")
+      .data([dataK1])
+      .attr("class", "line1")
+.attr("d", valueline) // set starting position
+    ;
+
+  svg.append("path")
+      .data([line_data])
+      .attr("class", "line2")
+.attr("d", valueline1) // set starting position
+    ;
+  // Add the x Axis
+  svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x).ticks(7))
+    .selectAll("text")
+       .style("font-size", "12px") 
+    .attr("y", 7)
+   // .attr("x", 9)
+      .attr("dy", ".35em")
+  // .attr("dx", "-1.3em")
+    .attr("transform", "rotate(35)")
+    .style("text-anchor", "start");
+
+  // Add the y Axis
+  svg.append("g")
+      .call(d3.axisLeft(y).ticks(8).tickFormat(d3.format(".2s")))
+          .selectAll("text")
+       .style("font-size", "12px");
+
+
+    svg.append("text")
+        .attr("x", (width / 2))             
+        .attr("y", 0 - (margin.top / 2)+5)
+        .attr("text-anchor", "middle")  
+        .style("font-size", "12px") 
+       // .style("text-decoration", "underline")  
+        .text(country+" - daily new confirmed cases and moving average");
+      
+      
+      var keys = ["Daily new confirmed cases", "Moving 7-day average"]
+
+// Usually you have a color scale in your chart already
+var color = d3.scaleOrdinal()
+  .domain(keys)
+  .range(["red","black"]);
+
+// Add one dot in the legend for each name.
+var size = 20
+svg.selectAll("mydots")
+  .data(keys)
+  .enter()
+  .append("rect")
+    .attr("x", 20)
+    .attr("y", function(d,i){ return 20 + i*(size+5)}) // 100 is where the first dot appears. 25 is the distance between dots
+    .attr("width", size)
+    .attr("height", size)
+    .style("fill", function(d){ return color(d)})
+
+// Add one dot in the legend for each name.
+svg.selectAll("mylabels")
+  .data(keys)
+  .enter()
+  .append("text")
+    .attr("x", 20 + size*1.2)
+    .attr("y", function(d,i){ return 20 + i*(size+5) + (size/2)}) // 100 is where the first dot appears. 25 is the distance between dots
+    .style("fill", function(d){ return color(d)})
+    .text(function(d){ return d})
+    .attr("text-anchor", "left")
+         .style("font-size", "14px") 
+    .style("alignment-baseline", "middle")
+}  
+    
+function draw_curves(dataK2,name,country,iso){
+   // var dataK0=dataK2;
+    
+    d3.select("#all_curves").html("");
+       
+       
+    //console.log(dataK0);
+        // set the dimensions and margins of the graph
+var margin = {top: 20, right: 20, bottom: 30, left: 50},
+    width = window.innerWidth*0.6 - margin.left - margin.right,
+    height = window.innerWidth*0.4- margin.top - margin.bottom;
+
+// parse the date / time
+var parseTime = d3.timeParse("%M/%d/%y");
+
+// set the ranges
+var x = d3.scaleTime().range([0, width]);
+
+var y = d3.scaleLinear().range([height, 0]);
+    
+var valueline = d3.line()
+    .x(function(d) { return x(d["date1"]); })
+    .y(function(d) { return y(d["confirm_daily"]); });       
+    
+var valueline1 = d3.line()
+    .x(function(d) { return x(d["date1"]); })
+    .y(function(d) { return y(d["deaths_daily"]); });      
+ var valueline2 = d3.line()
+    .x(function(d) { return x(d["date1"]); })
+    .y(function(d) { return y(d["recover_daily"]); });   
+    
+        
+var svg = d3.select("#all_curves").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+//console.log(dataK2);
+// Get the data
+    
+   // alert(dataK2[0]["date"]);
+//d3.csv("data.csv").then(function(data) {
+dataK2.forEach(function(d) {
+      d["date1"] = new Date(2020,d.date.toString().split("/")[0]-1,d.date.toString().split("/")[1])
+      d["confirm_daily"] = +d["confirm_daily"];
+       d["recover_daily"] = +d["recover_daily"];
+       d["deaths_daily"] = +d["deaths_daily"];
+  });
+ 
+//console.log(dataK2);
+    var ddates=dataK2.map(function(d){return d.date1;});
+    //console.log(ddates);
+var cconfirmed=dataK2.map(function(d){return d["confirm_daily"];});
+    
+var crecovered=dataK2.map(function(d){return d["recover_daily"];});    
+  var cdeaths=dataK2.map(function(d){return d["deaths_daily"];});  
+    var maxxx=d3.max([d3.max(cconfirmed),d3.max(cdeaths),d3.max(crecovered)]);
+//console.log(cconfirmed);
+  x.domain(d3.extent(ddates));
+  y.domain([0,maxxx]);
+ // format the data
+  /*dataK.forEach(function(d) {
+      d["date"] = new Date(2020,d.date.toString().split("/")[0]-1,d.date.toString().split("/")[1])
+      d["comfirm_daily"] = +d["comfirm_daily"];
+       d["recover_daily"] = +d["recover_daily"];
+       d["deaths_daily"] = +d["deaths_daily"];
+  });*/
+  svg.append("path")
+      .data([dataK2])
+      .attr("class", "line1")
+      .attr("d", valueline);
+   svg.append("path")
+      .data([dataK2])
+      .attr("class", "line3")
+      .attr("d", valueline2);  
+   svg.append("path")
+      .data([dataK2])
+      .attr("class", "line2")
+      .attr("d", valueline1); 
+
+  // Add the x Axis
+  svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x).ticks(5))
+    .selectAll("text")
+    .attr("y", 7)
+   // .attr("x", 9)
+   .attr("dy", ".35em")
+    .attr("transform", "rotate(35)")
+    .style("text-anchor", "start");
+
+  // Add the y Axis
+  svg.append("g")
+      .call(d3.axisLeft(y).ticks(5).tickFormat(d3.format(".2s")));
+
+
+    svg.append("text")
+        .attr("x", (width / 2))             
+        .attr("y", 0 - (margin.top / 2))
+        .attr("text-anchor", "middle")  
+        .style("font-size", "12px") 
+       // .style("text-decoration", "underline")  
+        .text(country+" - daily changes");
+//console.log(dataK2);
+   
+}
+    
+function draw_histogram(data0,name,cl,country,data8,data10,iso){if (typeof data8!="undefined") {
+    var days=data8["x"].length-100; //64
+        
+    } 
+                                                                else {
+        
+        var days=data0.length-100;
+    }
+    var double_days=days*2;
+    var total=double_days-10-29-Number(data0[data0.length-1]["date"].split("/")[1]);
+var d = new Date('2020-01-22');
+
+var monthRollsOver = addDays(d, double_days);
+      //  console.log(typeof data8);                                                        
+if (typeof data8=="object") {
+    var left=1-1/data8["x"].length*100;
+        } else {
+        
+        var left=1-1/data0.length*50;
+
+    }
+    var left0=1-left;
+    var right0=1+left
+    
+
+     var xx = d3.scaleLinear()
+    .domain([left0,right0])
+    .range([Math.round(new Date(2020,0,22).getTime()/1000), Math.round(new Date(2020,monthRollsOver.getMonth(),monthRollsOver.getDate()).getTime()/1000)]);
+
+    var data=[];
+    var data8_=[];
+     var data88={};
+    data88['y']=[];
+    if (document.querySelectorAll("input[name=log_linear]:checked")[0].value=="log") {
+     for (var i=0; i<data0.length; i++) {
+        var bb=name;
+         
+         var temp={};
+         temp["date"]=data0[i]["date"];
+         temp[bb]=Math.log(data0[i][name]+0.001);
+    data.push(temp);
+    }
+         if (typeof data8=="object")    {
+    for (var i=50; i<50+days; i++) {//data8['y'].length
+     data8_.push({'x':Math.log(data8['x'][i]),'y':Math.log(data8['y'][i])});
+     data88['y'].push(Math.log(data8['y'][i]));
+    }    
+         }
+    } else {
+     for (var i=0; i<data0.length; i++) {
+          var bb=name;
+         var temp={};
+         temp["date"]=data0[i]["date"];
+         temp[bb]=data0[i][name];
+    data.push(temp);
+    }   
+    if (typeof data8=="object")    {
+           for (var i=50; i<50+days; i++) { //data8['y'].length
+ data8_.push({'x':data8['x'][i],'y':data8['y'][i]});  
+               data88['y'].push(data8['y'][i]);
+    }     
+    }
+    }
+    
+    
+
+    // set the dimensions and margins of the graph
+var margin = {top: 20, right: 20, bottom: 35, left: 50},
+    width = window.innerWidth*0.6 - margin.left - margin.right,
+    height = window.innerWidth*0.4- margin.top - margin.bottom;
+
+// parse the date / time
+var parseTime = d3.timeParse("%M/%d/%y");
+
+// set the ranges
+var x = d3.scaleTime().range([0, width]);
+
+var y = d3.scaleLinear().range([height, 0]);
+ if (document.querySelectorAll("input[name=log_linear]:checked")[0].value=="log") {  
+ var valueline = d3.line()
+    .x(function(d) { return x(d["date_"+name]); })
+    .y(function(d) { if (d[name]<0)  {return y(0)} else {return y(d[name])} });   
+ } else {
+     var valueline = d3.line()
+    .x(function(d) { return x(d["date_"+name]); })
+    .y(function(d) { return y(d[name]); });   
+     
+ }
+     
+    if (typeof data8=="object")    { 
+        var x1 = d3.scaleLinear().range([0, width]).domain([left0,right0]);
+    var valueline2 = d3.line()
+    .x(function(d) { return x1(d['x']); })
+    .y(function(d) { return y(d['y']); });   
+    }
+   if (typeof data8=="object") { 
+// append the svg obgect to the body of the page
+// appends a 'group' element to 'svg'
+// moves the 'group' element to the top left margin
+var svg = d3.select("#"+name).append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+// Get the data
+//d3.csv("data.csv").then(function(data) {
+
+  // format the data
+  data.forEach(function(d) {
+      d["date_"+name] = new Date(2020,d.date.toString().split("/")[0]-1,d.date.toString().split("/")[1])
+      d[name] = +d[name];
+  });
+//console.log(data);
+  // Scale the range of the data
+  x.domain([new Date(2020,0,22),new Date(2020,monthRollsOver.getMonth(),monthRollsOver.getDate())]);//d3.extent(data,function(d){return d["date_"+name];}));
+    //console.log(x.domain())
+    
+  var ext=d3.extent(data, function(d) { return d[name]; });
+    
+var maxx=d3.max([d3.max(data.map(function(d){return d[bb]})),d3.max(data88['y'].map(function(d){return d}))]);  
+    
+ if (document.querySelectorAll("input[name=log_linear]:checked")[0].value=="log") {    
+  y.domain([0,maxx+1]);
+ } else {
+      y.domain([ext[0],maxx+1]);
+     
+ }
+  // Add the valueline path.
+  svg.append("path")
+      .data([data])
+      .attr("class", cl)
+      .attr("d", valueline);
+  if (typeof data8=="object")    {   
+     // console.log(data10);
+      if (data10["x"]<=1.1) { 
+svg.append("path")
+      .data([data8_])
+      .attr("class", "grey")
+      .attr("d", valueline2);
+          
+      } else {
+   svg.append("path")
+      .data([data8_])
+      .attr("class", "grey1")
+      .attr("d", valueline2);       
+          
+          
+      }
+  }
+
+  // Add the x Axis
+  svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x).ticks(5))
+    .selectAll("text")
+    .attr("y", 7)
+   // .attr("x", 9)
+   .attr("dy", ".35em")
+    .attr("transform", "rotate(35)")
+    .style("text-anchor", "start");
+
+  // Add the y Axis
+  svg.append("g")
+      .call(d3.axisLeft(y).ticks(5).tickFormat(d3.format(".2s")));
+
+//});
+    var names={"confirm":"Confirmed","recover":"Recovered","deaths":"Deaths"};
+    
+    svg.append("text")
+        .attr("x", (width / 2))             
+        .attr("y", 0 - (margin.top / 2))
+        .attr("text-anchor", "middle")  
+        .style("font-size", "12px") 
+       // .style("text-decoration", "underline")  
+        .text(country+" - "+names[name]);
+       
+   }
+   // console.log(data8);
+    // && ["mixed_18","187"].indexOf(iso)==-1
+    if (typeof data8=="object") {
+    svg.selectAll("circle")
+    .data([data10])
+    .enter().append("circle")
+    .style("stroke", "black")
+    .style("fill", "gray")
+    .attr("r", 3)
+    .attr("cx", function(d){return x1(d.x);})
+    .attr("cy", function(d){return y(d.y);});
+    }
+
+}    
+        function closeF(e){
+    
+        $("#dialog").dialog("close");
+      
+    }
+    
+    function closeG(e){
+
+              popup.remove();
+    }
+    
+
+
+</script>
+
+ 
+</body>
+</html>

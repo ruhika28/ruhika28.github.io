@@ -1,0 +1,205 @@
+time,Alert Level,Iso,Iso3
+Hongkong,3,HK,HKG
+Macao,1,MO,MAC
+Taiwan,2,TW,TWN
+China,1,CN,CHN
+South Korea,4,KR,KOR
+Japan,3,JP,JPN
+Australia,3,AU,AUS
+Malaysia,2,MY,MYS
+Singapore,3,SG,SGP
+Philippines,2,PH,PHL
+Vietnam,2,VN,VNM
+Brunei Darussalam,2,BN,BRN
+Cambodia,2,KH,KHM
+New Zealand,2,NZ,NZL
+Mongolia,1,MN,MNG
+French Polynesia,1,PF,PYF
+Guam,1,GU,GUM
+Italy,4,IT,ITA
+Spain,4,ES,ESP
+France,4,FR,FRA
+Germany,4,DE,DEU
+Switzerland,4,CH,CHE
+UK,4,GB,GBR
+Netherlands,3,NL,NLD
+Belgium,3,BE,BEL
+Austria,3,AT,AUT
+Norway,4,NO,NOR
+Sweden,3,SE,SWE
+Denmark,3,DK,DNK
+Portugal,2,PT,PRT
+Czechia,3,CZ,CZE
+Greece,2,GR,GRC
+Finland,3,FI,FIN
+Israel,3,IL,ISR
+Ireland,2,IE,IRL
+Slovenia,2,SI,SVN
+Poland,4,PL,POL
+Estonia,2,EE,EST
+Iceland,2,IS,ISL
+Romania,2,RO,ROU
+Luxembourg,2,LU,LUX
+San Marino,2,SM,SMR
+Slovakia,2,SK,SVK
+Russia,2,RU,RUS
+Serbia,2,RS,SRB
+Bulgaria,2,BG,BGR
+Croatia,2,HR,HRV
+Latvia,2,LV,LVA
+Albania,2,AL,ALB
+Armenia,2,AM,ARM
+Hungary,2,HU,HUN
+Turkey,2,TR,TUR
+Malta,2,MT,MLT
+Belarus,2,BY,BLR
+Georgia,2,GE,GEO
+Cyprus,2,CY,CYP
+Kazakhstan,2,KZ,KAZ
+North Macedonia,2,MK,MKD
+Moldova,2,MD,MDA
+Lithuania,2,LT,LTU
+Azerbaijan,1,AZ,AZE
+Bosnia and Herzegovina,2,BA,BIH
+Andorra,1,AN,AND
+Uzbekistan,1,UZ,UZB
+Ukraine,4,UA,UKR
+Monaco,1,MC,MCO
+Liechtenstein,1,LI,LIE
+Montenegro,1,ME,MNE
+Holy See,1,VA,VAT
+Faroe Islands,1,FO,FRO
+Jersey,1,JE,JEY
+Gibraltar,1,GI,GIB
+Guernsey,1,GG,GGY
+India,4,IN,IND
+Thailand,2,TH,THA
+Indonesia,2,ID,IDN
+Maldives,2,MV,MDV
+Sri Lanka,2,LK,LKA
+Bangladesh,2,BD,BGD
+Nepal,1,NP,NPL
+Bhutan,1,BT,BTN
+Iran,4,IR,IRN
+Qatar,3,QA,QAT
+Bahrain,3,BH,BHR
+Pakistan,2,PK,PAK
+Saudi Arabia,2,SA,SAU
+Egypt,2,EG,EGY
+Iraq,2,IQ,IRQ
+Kuwait,2,KW,KWT
+Lebanon,2,LB,LBN
+UAE,2,AE,ARE
+Morocco,2,MA,MAR
+Jordan,1,JO,JOR
+Oman,2,OM,OMN
+Tunisia,2,TN,TUN
+Afghanistan,1,AF,AFG
+Sudan,1,SD,SDN
+Somalia,1,SO,SOM
+Palestine,2,PS,PSE
+South Africa,2,ZA,ZAF
+Algeria,2,DZ,DZA
+Senegal,1,SN,SEN
+Burkina Faso,1,BF,BFA
+Rwanda,2,RW,RWA
+Cote d'Ivoire,1,CI,CIV
+Ghana,1,GH,GHA
+Cameroon,2,CM,CMR
+Ethiopia,1,ET,ETH
+Seychelles,1,SC,SYC
+DRC,1,CD,COD
+Kenya,1,KE,KEN
+Nigeria,1,NG,NGA
+Namibia,1,NA,NAM
+Gabon,1,GA,GAB
+Guinea,1,GN,GIN
+Togo,1,TG,TGO
+Central African Republic,1,CF,CAF
+Equatorial Guinea,1,GQ,GNQ
+Congo,1,CG,COD
+Eswatini,1,SZ,SWZ
+Mauritania,1,MR,MRT
+Benin,1,BJ,BEN
+Liberia,1,LR,LBR
+Tanzania,1,TZ,TZA
+Reunion,1,RE,REU
+Greenland,3,GL,GRL
+US,4,US,USA
+Canada,4,CA,CAN
+Brazil,4,BR,BRA
+Chile,2,CL,CHL
+Peru,2,PE,PER
+Mexico,2,MX,MEX
+Panama,2,PA,PAN
+Argentina,2,AR,ARG
+Ecuador,2,EC,ECU
+Colombia,2,CO,COL
+Costa Rica,2,CR,CRI
+Venezuela,1,VE,VEN
+Dominican Republic,1,DO,DOM
+Jamaica,2,JM,JAM
+Bolivia,1,BO,BOL
+Paraguay,2,PY,PRY
+Honduras,1,HN,HND
+Uruguay,1,UY,URY
+Guatemala,1,GT,GTM
+Cuba,1,CU,CUB
+Trinidad and Tobago,1,TT,TTO
+Guyana,2,GY,GUY
+Saint Lucia,1,LC,LCA
+Saint Vincent and the Grenadines,1,VC,VCT
+Antigua and Barbuda,1,AG,ATG
+Bahamas,2,BS,BHS
+Suriname,1,SR,SUR
+Martinique,1,MQ,MTQ
+French Guiana,1,GF,GUF
+Guadeloupe,1,GP,GLP
+Puerto Rico,1,PR,PRI
+Curacao,1,CW,CUW
+Saint Martin,1,MF,MAF
+Saint Barthelemy,1,BL,BLM
+Cayman Islands,1,KY,CYM
+Aruba,1,AW,ABW
+US Virgin Islands,1,VI,VIR
+Mayotte,1,YT,MYT
+Mozambique,1,MZ,MOZ
+Angola ,1,AO,AGO
+Barbados,1,BB,BRB
+Bermuda,1,BM,BMU
+Belize,1,BZ,BLZ
+Chad,1,TD,TCD
+Cape Verde,1,CV,CPV
+Djibouti,1,DJ,DJI
+Dominica,1,DM,DMA
+Eritrea,1,ER,ERI
+El Salvador,1,SV,SLV
+Fiji,1,FJ,FJI
+Gambia,1,GM,GMB
+Grenada,1,GD,GRD
+Haiti,1,HT,HTI
+Kyrgyzstan,1,KG,KGZ
+"Korea, Democratic People's Republic of",1,KP,PRK
+Laos,1,LA,LAO
+Libya,1,LY,LBY
+Madagascar,1,MG,MDG
+Montserrat,1,MS,MSR
+Mali,1,ML,MLI
+Mauritius,1,MU,MUS
+New Caledonia,1,NC,NCL
+Niger,1,NE,NER
+Andorra,1,AD,AND
+Isle of Man,1,IM,IMN
+Nicaragua,1,NI,NIC
+Papua New Guinea,1,PG,PNG
+Guinea-Bissau,1,GW,GNB
+Saint Kitts and Nevis,1,KN,KNA
+Syria,1,SY,SYR
+Uganda,1,UG,UGA
+Zambia,1,ZM,ZMB
+Zimbabwe,1,ZW,ZWE
+Timor-Leste,1,TL,TLS
+Sierra Leone,1,SL,SLE
+Burma,1,MM,MMR
+Comoros,1,KM,COM
+Tajikistan,1,TJ,TJK
