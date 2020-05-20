@@ -79,13 +79,12 @@ html +='<span class="cell m'+data0[i]["id"]+'"></span>';
 
 
 for(var i=0; i<data0.length; i++) {
-if ((data0[i]["color"]==window.location.hash.replace("#",""))){
+
    var country_prov=[];
-
-
 
       for(var i=0; i<data0.length; i++)
        {
+       if ((data0[i]["color"]==window.location.hash.replace("#",""))){
        country_prov.push(data0[i]["province"]+data0[i]["country"]);
 
         }
