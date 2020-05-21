@@ -6,6 +6,7 @@
     <script src="https://d3js.org/d3.v4.js"></script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/motion-ui/1.1.1/motion-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.3.0/css/foundation.min.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -17,7 +18,74 @@
     }
      .ui-widget
      {
- text-shadow: 1px 1px 2px pink;
+    text-shadow: 1px 1px 2px pink;
+}
+  .btn {
+  width: 100px;
+  height: 30px;
+  border-radius: 4px;
+  border: none;
+  font-size: 16px;
+  color: #fff;
+  background-color: #4eaadd;
+  cursor: pointer;
+}
+
+.btn:hover { background-color: #54b6ea; }
+
+.is-blurred {
+  filter: blur(2px);
+  -webkit-filter: blur(2px);
+}
+
+
+.btn:hover { background-color: #54b6ea; }
+
+/* Overlay */
+
+.Modal {
+  display: block;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 9999;
+  width: 100%;
+  height:100%;
+  padding-top: 100px;
+  background-color: black;
+  background-color: rgba(0, 0, 0, 0.4);
+  -webkit-transition: 0.5s;
+  overflow: auto;
+  transition: all 0.3s linear;
+}
+
+.Modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border-radius: 4px;
+  max-width: 300px;
+  height: 450px;
+}
+
+.ModalOpen { overflow: hidden; }
+
+.is-hidden { display: none; }
+
+.is-visuallyHidden { opacity: 0; }
+
+/* The Close Button */
+
+.Close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 16px;
+}
+
+.Close:hover, .Close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 
@@ -28,6 +96,7 @@
 <div class="ui-widget">
     <label for="country_prov">Select country/province </label>
     <input id="country_prov" ,type="text" placeholder="Enter Country/Province">
+    <button id="myBtn" class="btn">Open Modal</button>
 </div>
 
 </div>
@@ -37,14 +106,21 @@
 
         </div>
 
-
     </article>
 </div>
 
+<!-- Modal container it includes the overlay -->
+        <div id="myModal" class="Modal is-hidden is-visuallyHidden">
+            <!-- Modal content -->
+            <div class="Modal-content">
+                <span id="closeModal" class="Close">&times;</span>
+                <h2>Simple Modal</h2>
+
+            </div>
+        </div>
+
+
 <script>
-
-
-
 // set the dimensions and margins of the graph
     var margin = {top: 3, right: 20, bottom: 30, left: 50},
     width = screen.width*0.15 - margin.left - margin.right,
@@ -101,7 +177,18 @@ for(var i=0; i<data0.length; i++) {
     }}
 
 
-
+var modal=document.getElementById("myModal"),
+body=document.getElementsByTagName("body"),
+container=document.getElementsByClassName("off-canvas-content has-reveal-left"),
+btnOpen=document.getElementById("myBtn"),
+btnClose=document.getElementById("closeModal");
+btnOpen.onclick=function(){modal.className="Modal is-visuallyHidden",
+setTimeout(function(){container.className="off-canvas-content has-reveal-left is-blurred",
+modal.className="Modal"},100),container.parentElement.className="ModalOpen"},
+btnClose.onclick=function(){modal.className="Modal is-hidden is-visuallyHidden",
+body.className="",container.className="off-canvas-content has-reveal-left",container.parentElement.className=""},
+window.onclick=function(e){e.target==modal&&(modal.className="Modal is-hidden",
+body.className="",container.className="off-canvas-content has-reveal-left",container.parentElement.className="")};
 
 
 
