@@ -62,13 +62,12 @@
 .Modal-content {
   background-color: #fefefe;
   margin: auto;
-  padding: 20px;
   border-radius: 4px;
-  max-width: 300px;
-  height: 450px;
+  padding: 20px;
+  width: 500px;
+  height: 500px;
 }
 
-.ModalOpen { overflow: hidden; }
 
 .is-hidden { display: none; }
 
@@ -88,6 +87,9 @@
   cursor: pointer;
 }
 
+.demo
+{text-align: center;
+}
 
     </style>
 
@@ -112,9 +114,10 @@
 <!-- Modal container it includes the overlay -->
         <div id="myModal" class="Modal is-hidden is-visuallyHidden">
             <!-- Modal content -->
-            <div class="Modal-content">
+            <div class="Modal-content" id="modal_graph">
                 <span id="closeModal" class="Close">&times;</span>
-                <h2>Simple Modal</h2>
+               <p id="demo"></p>
+
 
             </div>
         </div>
@@ -153,7 +156,7 @@ html +='<span class="cell m'+data0[i]["id"]+'"></span>';
 
 
 
-
+/* used to populate the search  button so users can search   by country  */
 for(var i=0; i<data0.length; i++) {
 
    var country_prov=[];
@@ -161,38 +164,145 @@ for(var i=0; i<data0.length; i++) {
       for(var i=0; i<data0.length; i++)
        {
        if ((data0[i]["color"]==window.location.hash.replace("#",""))){
-       country_prov.push(data0[i]["province"]+data0[i]["country"]);
+       country_prov.push(data0[i]["province"]+""+data0[i]["country"]);
 
         }
-
+/*debugging */
  console.log(country_prov)
 
 
     $( "#country_prov" ).autocomplete({
 
       source: Object.values(country_prov)
+
         })
 
 
     }}
 
+/* displaying the graph  on popup and disable the  background */
 
 var modal=document.getElementById("myModal"),
 body=document.getElementsByTagName("body"),
 container=document.getElementsByClassName("off-canvas-content has-reveal-left"),
 btnOpen=document.getElementById("myBtn"),
 btnClose=document.getElementById("closeModal");
-btnOpen.onclick=function(){modal.className="Modal is-visuallyHidden",
+btnOpen.onclick=function(){
+var x = document.getElementById("country_prov").value;
+document.getElementById("demo").innerHTML = x;
+var margin = {top: 10, right: 50, bottom: 60, left: 50},
+width = screen.width*0.25 - margin.left - margin.right,
+height = screen.width*0.25 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+
+var svg = d3.select("#modal_graph")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+//Read the data
+d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/data_IC.csv",function(data) {
+
+  // Add X axis --> it is a date format
+  var x = d3.scaleLinear()
+    .domain([1,100])
+    .range([ 0, width ]);
+  svg.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x));
+
+  // Add Y axis
+  var y = d3.scaleLinear()
+    .domain([0, 13])
+    .range([ height, 0 ]);
+  svg.append("g")
+    .call(d3.axisLeft(y));
+
+  // This allows to find the closest X index of the mouse:
+  var bisect = d3.bisector(function(d) { return d.x; }).left;
+
+  // Create the circle that travels along the curve of chart
+  var focus = svg
+    .append('g')
+    .append('circle')
+      .style("fill", "none")
+      .attr("stroke", "black")
+      .attr('r', 8.5)
+      .style("opacity", 0)
+
+  // Create the text that travels along the curve of chart
+  var focusText = svg
+    .append('g')
+    .append('text')
+      .style("opacity", 0)
+      .attr("text-anchor", "left")
+      .attr("alignment-baseline", "middle")
+
+  // Add the line
+  svg
+    .append("path")
+    .datum(data)
+    .attr("fill", "none")
+    .attr("stroke", "steelblue")
+    .attr("stroke-width", 1.5)
+    .attr("d", d3.line()
+      .x(function(d) { return x(d.x) })
+      .y(function(d) { return y(d.y) })
+      )
+
+  // Create a rect on top of the svg area: this rectangle recovers mouse position
+  svg
+    .append('rect')
+    .style("fill", "none")
+    .style("pointer-events", "all")
+    .attr('width', width)
+    .attr('height', height)
+    .on('mouseover', mouseover)
+    .on('mousemove', mousemove)
+    .on('mouseout', mouseout);
+
+
+  // What happens when the mouse move -> show the annotations at the right positions.
+  function mouseover() {
+    focus.style("opacity", 1)
+    focusText.style("opacity",1)
+  }
+
+  function mousemove() {
+    // recover coordinate we need
+    var x0 = x.invert(d3.mouse(this)[0]);
+    var i = bisect(data, x0, 1);
+    selectedData = data[i]
+    focus
+      .attr("cx", x(selectedData.x))
+      .attr("cy", y(selectedData.y))
+    focusText
+      .html("x:" + selectedData.x + "  -  " + "y:" + selectedData.y)
+      .attr("x", x(selectedData.x)+15)
+      .attr("y", y(selectedData.y))
+    }
+  function mouseout() {
+    focus.style("opacity", 0)
+    focusText.style("opacity", 0)
+  }
+
+})
+modal.className="Modal is-visuallyHidden",
 setTimeout(function(){container.className="off-canvas-content has-reveal-left is-blurred",
-modal.className="Modal"},100),container.parentElement.className="ModalOpen"},
+modal.className="Modal"},100),
+container.getElementById="myModal"},
 btnClose.onclick=function(){modal.className="Modal is-hidden is-visuallyHidden",
+location.reload();
 body.className="",container.className="off-canvas-content has-reveal-left",container.parentElement.className=""},
 window.onclick=function(e){e.target==modal&&(modal.className="Modal is-hidden",
 body.className="",container.className="off-canvas-content has-reveal-left",container.parentElement.className="")};
 
 
 
-   // alert(window.location.hash.replace("#",""));
     d3.select(".grid-x").html(html);
     for (var i=0; i<data0.length; i++) {
         if ((data0[i]["color"]==window.location.hash.replace("#","")))
